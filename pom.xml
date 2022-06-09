@@ -11,8 +11,8 @@
 	</parent>
 
 	<groupId>com.swharden</groupId>
-	<version>1.0.0</version>
 	<artifactId>swharden_quickpv</artifactId>
+	<version>1.1.0</version>
 
 	<name>QuickPV</name>
 	<description>A quicker file loader for PrairieView folders.</description>
