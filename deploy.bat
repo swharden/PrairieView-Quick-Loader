@@ -1,0 +1,1 @@
+copy "target\quickpv-0.1.0.jar" "C:\Users\scott\Documents\important\apps\ImageJ\plugins\swharden_quickpv.jar"
