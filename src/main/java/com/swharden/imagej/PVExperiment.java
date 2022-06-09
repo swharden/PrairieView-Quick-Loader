@@ -10,6 +10,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 
 import com.swharden.imagej.PrairieMetadata.PFile;
+import com.swharden.imagej.PrairieMetadata.Sequence;
 
 public class PVExperiment {
 
@@ -27,36 +28,58 @@ public class PVExperiment {
 
         PrairieMetadata meta = new PrairieMetadata(xml, null, null);
 
-        if (!meta.getFirstSequence().isTimeSeries()) {
-            throw new Exception("only time series are supported");
-        }
-
-        if (meta.getSequences().size() == 1) {
+        if (meta.getCycleCount() == 1) {
             // TSeries of a single plane
             StackDepth = 1;
             ChannelCount = meta.getActiveChannels().length;
             TimePoints = meta.getFirstSequence().getIndexCount();
-            ImageCount = TimePoints * ChannelCount;
+            ImageCount = StackDepth * TimePoints * ChannelCount;
             FilePaths = GetFilenamesTSeries(meta);
         } else {
-            // multiple sequences
-            throw new Exception("only single sequence TSeries are supported");
+            // Repeated ZSeries
+            StackDepth = meta.getFirstSequence().getIndexCount();
+            ChannelCount = meta.getActiveChannels().length;
+            TimePoints = meta.getCycleCount();
+            ImageCount = StackDepth * TimePoints * ChannelCount;
+            FilePaths = GetFilenamesTZSeries(meta);
         }
     }
 
     private static String[] GetFilenamesTSeries(PrairieMetadata meta) {
 
+        List<String> filenames = new ArrayList<String>();
+
+        int[] channels = meta.getActiveChannels();
+
         int cycle = meta.getFirstSequence().getCycle();
         int iStart = meta.getFirstSequence().getIndexMin();
         int iEnd = meta.getFirstSequence().getIndexMax();
-        int[] channels = meta.getActiveChannels();
-
-        List<String> filenames = new ArrayList<String>();
 
         for (int i = iStart; i <= iEnd; i++) {
             for (int channel : channels) {
                 PFile file = meta.getFile(cycle, i, channel);
                 filenames.add(file.getFilename());
+            }
+        }
+
+        return filenames.toArray(new String[0]);
+    }
+
+    private static String[] GetFilenamesTZSeries(PrairieMetadata meta) {
+
+        List<String> filenames = new ArrayList<String>();
+
+        int[] channels = meta.getActiveChannels();
+
+        for (Sequence sequence : meta.getSequences()) {
+            int iStart = sequence.getIndexMin();
+            int iEnd = sequence.getIndexMax();
+            int cycle = sequence.getCycle();
+            for (int i = iStart; i <= iEnd; i++) {
+                for (int channel : channels) {
+                    PFile file = meta.getFile(cycle, i, channel);
+                    filenames.add(file.getFilename());
+                }
             }
         }
 

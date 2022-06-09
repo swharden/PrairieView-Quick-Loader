@@ -8,7 +8,7 @@ import ij.plugin.HyperStackConverter;
 import ij.plugin.ImagesToStack;
 import ij.plugin.PlugIn;
 
-public class HyperPV implements PlugIn {
+public class QuickPV implements PlugIn {
 
     @Override
     public void run(String arg) {
@@ -33,9 +33,16 @@ public class HyperPV implements PlugIn {
 
         IJ.showStatus(String.format("Loading %s PrairieView images...", exp.ImageCount));
         for (int i = 0; i < exp.ImageCount; i++) {
-            String filePath = folderPath + "/" + exp.FilePaths[i];
-            arrayOfImages[i] = new ImagePlus(filePath);
             IJ.showProgress(i, exp.ImageCount);
+            if (i < exp.FilePaths.length) {
+                String filePath = folderPath + "/" + exp.FilePaths[i];
+                arrayOfImages[i] = new ImagePlus(filePath);
+            } else {
+                int width = arrayOfImages[0].getWidth();
+                int height = arrayOfImages[0].getHeight();
+                int depth = arrayOfImages[0].getBitDepth();
+                arrayOfImages[i] = IJ.createImage("empty", "composite", width, height, depth);
+            }
         }
         IJ.showStatus("");
 
