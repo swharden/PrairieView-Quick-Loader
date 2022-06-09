@@ -18,7 +18,13 @@ public class PVExperiment {
     public int StackDepth;
     public int TimePoints;
     public int ImageCount;
-    public String[] FilePaths;
+
+    public String[] FilePaths; // may be less than ImageCount if aborted before completion
+
+    public double PixelWidth = 1; // microns
+    public double PixelHeight = 1; // microns 
+    public double PixelDepth = 1; // microns
+    public double FrameInterval = 1; // seconds
 
     public PVExperiment(String xmlFilePath) throws Exception {
         File xmlFile = new File(xmlFilePath);
@@ -28,21 +34,24 @@ public class PVExperiment {
 
         PrairieMetadata meta = new PrairieMetadata(xml, null, null);
 
+        ChannelCount = meta.getActiveChannels().length;
+
         if (meta.getCycleCount() == 1) {
             // TSeries of a single plane
             StackDepth = 1;
-            ChannelCount = meta.getActiveChannels().length;
             TimePoints = meta.getFirstSequence().getIndexCount();
-            ImageCount = StackDepth * TimePoints * ChannelCount;
             FilePaths = GetFilenamesTSeries(meta);
         } else {
             // Repeated ZSeries
             StackDepth = meta.getFirstSequence().getIndexCount();
-            ChannelCount = meta.getActiveChannels().length;
             TimePoints = meta.getCycleCount();
-            ImageCount = StackDepth * TimePoints * ChannelCount;
             FilePaths = GetFilenamesTZSeries(meta);
         }
+
+        ImageCount = StackDepth * TimePoints * ChannelCount;
+
+        PixelWidth = meta.getFirstSequence().getFirstFrame().getMicronsPerPixelX();
+        PixelHeight = meta.getFirstSequence().getFirstFrame().getMicronsPerPixelY();
     }
 
     private static String[] GetFilenamesTSeries(PrairieMetadata meta) {

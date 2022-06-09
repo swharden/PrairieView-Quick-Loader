@@ -4,6 +4,7 @@ import java.io.File;
 
 import ij.IJ;
 import ij.ImagePlus;
+import ij.measure.Calibration;
 import ij.plugin.HyperStackConverter;
 import ij.plugin.ImagesToStack;
 import ij.plugin.PlugIn;
@@ -48,6 +49,15 @@ public class QuickPV implements PlugIn {
 
         ImagePlus imp = ImagesToStack.run(arrayOfImages);
         imp = HyperStackConverter.toHyperStack(imp, exp.ChannelCount, exp.StackDepth, exp.TimePoints, "composite");
+
+        Calibration cal = new Calibration();
+        cal.pixelWidth = exp.PixelWidth;
+        cal.pixelHeight = exp.PixelHeight;
+        cal.pixelDepth = exp.PixelDepth;
+        cal.frameInterval = exp.FrameInterval;
+        cal.setUnit("micron");
+        imp.setCalibration(cal);
+
         imp.show();
     }
 }
