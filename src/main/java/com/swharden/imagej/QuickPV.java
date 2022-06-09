@@ -1,6 +1,8 @@
 package com.swharden.imagej;
 
 import java.io.File;
+import java.nio.file.Paths;
+import java.security.Timestamp;
 
 import ij.IJ;
 import ij.ImagePlus;
@@ -13,6 +15,8 @@ public class QuickPV implements PlugIn {
 
     @Override
     public void run(String arg) {
+
+        long timeStart = System.currentTimeMillis();
 
         String xmlFilePath = IJ.getFilePath("Select XML file");
         if (xmlFilePath == null)
@@ -45,10 +49,12 @@ public class QuickPV implements PlugIn {
                 arrayOfImages[i] = IJ.createImage("empty", "composite", width, height, depth);
             }
         }
-        IJ.showStatus("");
+
+        IJ.showStatus("Creating hyperstack...");
 
         ImagePlus imp = ImagesToStack.run(arrayOfImages);
         imp = HyperStackConverter.toHyperStack(imp, exp.ChannelCount, exp.StackDepth, exp.TimePoints, "composite");
+        imp.setTitle(Paths.get(folderPath).getFileName().toString());
 
         Calibration cal = new Calibration();
         cal.pixelWidth = exp.PixelWidth;
@@ -59,5 +65,8 @@ public class QuickPV implements PlugIn {
         imp.setCalibration(cal);
 
         imp.show();
+
+        long timeElapsed = System.currentTimeMillis() - timeStart;
+        IJ.showStatus(String.format("QuickPV loaded %d images in %.3f sec", exp.ImageCount, timeElapsed / 1000.0));
     }
 }
