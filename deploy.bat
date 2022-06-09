@@ -1,1 +1,3 @@
-copy "target\quickpv-0.1.0.jar" "C:\Users\scott\Documents\important\apps\ImageJ\plugins\swharden_quickpv.jar"
+copy "target\swharden_quickpv*.jar" "C:\Users\scott\Documents\important\apps\ImageJ\plugins"
+del "C:\Users\scott\Documents\important\apps\ImageJ\plugins\swharden_quickpv*-tests.jar"
+del "C:\Users\scott\Documents\important\apps\ImageJ\plugins\swharden_quickpv*-sources.jar"
