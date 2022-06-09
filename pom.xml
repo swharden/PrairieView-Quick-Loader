@@ -12,7 +12,7 @@
 
 	<groupId>com.swharden</groupId>
 	<artifactId>quickpv</artifactId>
-	<version>0.1.0</version>
+	<version>1.0.0</version>
 
 	<name>QuickPV</name>
 	<description>A quicker file loader for PrairieView folders.</description>
