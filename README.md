@@ -16,6 +16,16 @@
 
 * Click `Plugins`, `Quick PrairieView Loader`, and select a TSeries XML file
 
+## Benchmark
+
+Time to load a TSeries with 99 sequences of 2-channel 31-slice stacks (6,138 TIFs, 776 MB) from a SSD:
+
+* Bio-Formats Importer: 10 minutes and 17 seconds
+
+* QuickPV: 58 seconds
+
+* Single file TIF: <1 second
+
 ## Build from Source
 
 * Get the [JDK](https://www.oracle.com/java/technologies/downloads/)
