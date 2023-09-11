@@ -49,7 +49,7 @@ The following ImageJ macro can be used to automate loading XML files from a coll
 ```java
 function ProcessFolder(dir, folderName){
 	
-	// locate the XML file
+    // locate the XML file
     xmlFilePath = dir+folderName+"/"+folderName+".xml";
     if (!File.exists(xmlFilePath))
         exit("XML file does not exist:\n" + xmlFilePath);
@@ -69,18 +69,18 @@ function ProcessFolder(dir, folderName){
     run("Quick PrairieView Loader", "select=[" + xmlFilePath + "]");
     
     // make channel 1 magenta instead of red
-	Stack.setPosition(1,1,1);
-	run("Magenta");
+    Stack.setPosition(1,1,1);
+    run("Magenta");
 	
-	// save the full stack
+    // save the full stack
     print("Saving: " + outputTifPath);
 	saveAs("Tiff", outputTifPath);
 
-	// create and save a projection
-	run("Z Project...", "projection=[Average Intensity]");
-	run("RGB Color");
+    // create and save a projection
+    run("Z Project...", "projection=[Average Intensity]");
+    run("RGB Color");
     print("Saving: " + outputPngPath);
-	saveAs("PNG", outputPngPath);
+    saveAs("PNG", outputPngPath);
 }
 
 function ProcessSubFolders(dir){
