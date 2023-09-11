@@ -98,7 +98,7 @@ function ProcessSubFolders(dir){
 	    folderName = list[i].replace("/","");
 	    
 	    print("");
-	    print("Processing " + i + " of " + list.length + ": " + folderName);
+	    print("Processing " + i + 1 + " of " + list.length + ": " + folderName);
 	    ProcessFolder(dir, folderName);
 		close("*");
 	}
