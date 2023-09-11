@@ -65,7 +65,7 @@ function ProcessFolder(dir, folderName){
     }
     
     // load source data
-    print("Loading...");
+    print("Loading: " + xmlFilePath);
     run("Quick PrairieView Loader", "select=[" + xmlFilePath + "]");
     
     // make channel 1 magenta instead of red
@@ -73,12 +73,13 @@ function ProcessFolder(dir, folderName){
 	run("Magenta");
 	
 	// save the full stack
-    print("Saving...");
+    print("Saving: " + outputTifPath);
 	saveAs("Tiff", outputTifPath);
 
 	// create and save a projection
 	run("Z Project...", "projection=[Average Intensity]");
 	run("RGB Color");
+    print("Saving: " + outputPngPath);
 	saveAs("PNG", outputPngPath);
 }
 
